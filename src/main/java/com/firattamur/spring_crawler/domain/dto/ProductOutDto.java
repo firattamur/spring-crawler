@@ -3,7 +3,7 @@ package com.firattamur.spring_crawler.domain.dto;
 import lombok.Data;
 
 @Data
-public class CrawlerResponseDto {
+public class ProductOutDto {
 
     private Long id;
     private String url;
