@@ -1,6 +1,6 @@
 # 🕷️ Spring-Crawler
 
-Spring-Crawler is a fun showcase project demonstrating web crawling capabilities for products from hepsiburada.com, with data persistence in a PostgreSQL database.
+Spring-Crawler is a fun showcase project demonstrating web crawling capabilities for products from [hepsiburada.com](https://www.hepsiburada.com/), with data persistence in a PostgreSQL database.
 
 ## 🚀 Features
 
@@ -20,6 +20,9 @@ Spring-Crawler is a fun showcase project demonstrating web crawling capabilities
 ## 🔄 How It Works
 
 1. Submit URLs via the `/submit` endpoint
+   - Only URLs from hepsiburada.com are accepted, others are rejected.
+   - Duplicate URLs are saved and crawled only once.
+   
 2. URLs are stored in PostgreSQL and messages are sent to Redis
 3. Workers listen for messages from Redis
 4. When notified, workers fetch URLs from PostgreSQL and crawl hepsiburada.com
@@ -36,10 +39,11 @@ Spring-Crawler is a fun showcase project demonstrating web crawling capabilities
 ## 🔗 API Endpoints
 
 1. `/submit`: Submit a product URL for crawling
+
    - Method: POST
    - Body: `{ "url": "https://www.hepsiburada.com/product-url" }`
-
 2. `/product`: Get product crawling status
+
    - Method: GET
    - Query Param: `id` (product ID)
 
@@ -60,7 +64,7 @@ Contributions, issues, and feature requests are welcome!
 This project is licensed under the MIT License.
 
 > **Note:** This is a really simple showcase and proof of concept for web crawling. In large-scale production environments, web crawling becomes significantly more complex. Many additional factors need to be considered, such as:
-> 
+>
 > - Scalability and distributed crawling
 > - Respect for robots.txt and crawl-delay directives
 > - IP rotation and proxy management
@@ -68,7 +72,5 @@ This project is licensed under the MIT License.
 > - Data deduplication and storage optimization
 > - Error handling and retry mechanisms
 > - Legal and ethical considerations
-> 
+>
 > This project serves as a starting point for understanding basic crawling concepts, but real-world implementations require careful planning and additional infrastructure.
-> 
-> 
