@@ -1,5 +1,7 @@
 package com.firattamur.spring_crawler.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.firattamur.spring_crawler.domain.dto.ProductInpDto;
@@ -14,11 +16,13 @@ import com.firattamur.spring_crawler.service.ProductService;
 
 
 
+@Slf4j
 @RestController
 public class ProductController {
 
     private final ProductService productService;
 
+    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
