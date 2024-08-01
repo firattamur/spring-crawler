@@ -19,13 +19,12 @@ Spring-Crawler is a fun showcase project demonstrating web crawling capabilities
 
 ## 🔄 How It Works
 
-1. Submit URLs through the `/submit` endpoint
-2. Workers listen for messages via Redis
-3. When a message arrives, workers:
-   - Read the product URL from the database
-   - Parse the product data
-   - Save the updated information to the database
-4. Check product status using the `/product` endpoint
+1. Submit URLs via the `/submit` endpoint
+2. URLs are stored in PostgreSQL and messages are sent to Redis
+3. Workers listen for messages from Redis
+4. When notified, workers fetch URLs from PostgreSQL and crawl hepsiburada.com
+5. Crawled data is saved back to PostgreSQL
+6. Users can check product status via the `/product` endpoint
 
 ## 📊 Product Statuses
 
