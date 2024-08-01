@@ -58,3 +58,17 @@ Contributions, issues, and feature requests are welcome!
 ## 📝 License
 
 This project is licensed under the MIT License.
+
+> **Note:** This is a really simple showcase and proof of concept for web crawling. In large-scale production environments, web crawling becomes significantly more complex. Many additional factors need to be considered, such as:
+> 
+> - Scalability and distributed crawling
+> - Respect for robots.txt and crawl-delay directives
+> - IP rotation and proxy management
+> - Rate limiting guards and anti-scraping measures
+> - Data deduplication and storage optimization
+> - Error handling and retry mechanisms
+> - Legal and ethical considerations
+> 
+> This project serves as a starting point for understanding basic crawling concepts, but real-world implementations require careful planning and additional infrastructure.
+> 
+> 
