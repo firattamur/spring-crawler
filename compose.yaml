@@ -2,6 +2,12 @@ version: '3.8'
 
 
 services:
+  redis:
+    image: 'redis:latest'
+    container_name: 'spring-crawler-redis'
+    ports:
+      - '6379:6379'
+
   database:
     image: 'postgres:latest'
     container_name: 'spring-crawler-database'
