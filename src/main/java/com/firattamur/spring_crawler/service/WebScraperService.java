@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
 import com.firattamur.spring_crawler.domain.entity.ProductStatus;
+import com.firattamur.spring_crawler.domain.model.ParsedProductData;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +50,7 @@ public class WebScraperService {
         this.objectMapper = objectMapper;
     }
 
-    public Optional<ProductEntity> scrape(String url) {
+    public Optional<ParsedProductData> scrape(String url) {
         try {
 
             Document doc = Jsoup.connect(url)
@@ -59,7 +61,7 @@ public class WebScraperService {
             Map<String, Object> productInfoMap = parseProductInfo(doc);
             Map<String, Object> productDescMap = parseProductDesc(doc);
 
-            return Optional.of(ProductEntity.builder()
+            return Optional.of(ParsedProductData.builder()
                     .price(getNestedValue(productInfoMap, "@graph", "offers", "price")
                             .map(Object::toString)
                             .map(Double::parseDouble)
@@ -73,7 +75,7 @@ public class WebScraperService {
                     .description(getNestedValue(productDescMap, "product", "description")
                             .map(Object::toString)
                             .orElse(null))
-                    .productStatus(ProductStatus.DONE)
+                    .crawledAt(LocalDateTime.now())
                     .build());
 
         } catch (Exception e) {

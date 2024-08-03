@@ -7,7 +7,15 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(
+        name = "products",
+        indexes = {
+        @Index(name = "idx_url", columnList = "url", unique = true)
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uc_url", columnNames = {"url"})
+        }
+)
 @Getter
 @Setter
 @Builder
@@ -19,9 +27,10 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String url;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "crawled_at")
@@ -29,6 +38,8 @@ public class ProductEntity {
 
     private Double price;
     private String title;
+
+    @Column(length = 3000)
     private String description;
     private String merchantName;
 

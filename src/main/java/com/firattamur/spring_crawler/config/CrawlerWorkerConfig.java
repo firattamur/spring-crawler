@@ -2,6 +2,7 @@ package com.firattamur.spring_crawler.config;
 
 import com.firattamur.spring_crawler.repository.ProductRepository;
 import com.firattamur.spring_crawler.service.JobQueueService;
+import com.firattamur.spring_crawler.service.ProductService;
 import com.firattamur.spring_crawler.service.WebScraperService;
 import com.firattamur.spring_crawler.worker.CrawlerWorker;
 import jakarta.annotation.PostConstruct;
@@ -33,22 +34,22 @@ public class CrawlerWorkerConfig {
     private int workerCount;
 
     private final JobQueueService jobQueueService;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final WebScraperService webScraperService;
 
     @Autowired
     public CrawlerWorkerConfig(JobQueueService jobQueueService,
-                               ProductRepository productRepository,
+                               ProductService productService,
                                WebScraperService webScraperService) {
         this.jobQueueService = jobQueueService;
-        this.productRepository = productRepository;
+        this.productService = productService;
         this.webScraperService = webScraperService;
     }
 
     @Bean
     public List<CrawlerWorker> crawlerWorkers() {
         return IntStream.range(0, workerCount)
-                .mapToObj(i -> new CrawlerWorker(i, jobQueueService, productRepository, webScraperService))
+                .mapToObj(i -> new CrawlerWorker(i, jobQueueService, productService, webScraperService))
                 .collect(Collectors.toList());
     }
 

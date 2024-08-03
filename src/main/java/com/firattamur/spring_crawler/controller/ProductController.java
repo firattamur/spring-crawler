@@ -4,6 +4,7 @@ import com.firattamur.spring_crawler.domain.entity.ProductEntity;
 import com.firattamur.spring_crawler.mapper.Mapper;
 import com.firattamur.spring_crawler.mapper.impl.ProductCreateDtoMapperImpl;
 import com.firattamur.spring_crawler.service.JobQueueService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.firattamur.spring_crawler.service.ProductService;
 
+import java.util.Optional;
 
 
 @Slf4j
@@ -42,23 +44,29 @@ public class ProductController {
     
     @PostMapping("/submit")
     public ProductResponseDto postMethodName(@RequestBody ProductCreateDto dto) {
-        log.info("Product submitted: {}", dto.getUrl());
+        ProductEntity productEntity = productService.findByUrl(dto.getUrl()).orElse(null);
+        if (productEntity != null) {
+            return productResponseDtoMapper.mapTo(productEntity);
+        }
 
-        ProductEntity productEntity = productCreateDtoMapper.mapFrom(dto);
-        ProductEntity savedProductEntity = productService.save(productEntity);
-        log.info("Product saved: {}", savedProductEntity.getId());
+        ProductEntity newProductEntity = productCreateDtoMapper.mapFrom(dto);
+        ProductEntity savedProductEntity = productService.save(newProductEntity);
+        log.info("Product saved with id: {}", savedProductEntity.getId());
 
         jobQueueService.enqueueJob(savedProductEntity.getUrl());
-        log.info("Product submitted to queue: {}", savedProductEntity.getUrl());
+        log.info("Product submitted to queue with url: {}", savedProductEntity.getUrl());
 
         return productResponseDtoMapper.mapTo(savedProductEntity);
     }
 
     @GetMapping("/product")
     public ProductResponseDto getMethodName(@RequestParam(name="id") Long id) {
-        ProductEntity productEntity = productService.findById(id);
+        Optional<ProductEntity> productEntity = productService.findById(id);
+        if (productEntity.isEmpty()) {
+            throw new ConstraintViolationException("Product not found", null);
+        }
 
-        return productResponseDtoMapper.mapTo(productEntity);
+        return productResponseDtoMapper.mapTo(productEntity.get());
     }
 
 }

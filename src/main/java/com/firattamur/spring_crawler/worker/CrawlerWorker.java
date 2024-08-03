@@ -1,8 +1,11 @@
 package com.firattamur.spring_crawler.worker;
 
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
+import com.firattamur.spring_crawler.domain.entity.ProductStatus;
+import com.firattamur.spring_crawler.domain.model.ParsedProductData;
 import com.firattamur.spring_crawler.repository.ProductRepository;
 import com.firattamur.spring_crawler.service.JobQueueService;
+import com.firattamur.spring_crawler.service.ProductService;
 import com.firattamur.spring_crawler.service.WebScraperService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +19,16 @@ public class CrawlerWorker implements Runnable {
 
     private final int workerId;
     private final JobQueueService jobQueueService;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final WebScraperService webScraperService;
     private boolean running = true;
 
     public CrawlerWorker(int workerId, JobQueueService jobQueueService,
-                         ProductRepository productRepository,
+                         ProductService productService,
                          WebScraperService webScraperService) {
         this.workerId = workerId;
         this.jobQueueService = jobQueueService;
-        this.productRepository = productRepository;
+        this.productService = productService;
         this.webScraperService = webScraperService;
     }
 
@@ -37,6 +40,7 @@ public class CrawlerWorker implements Runnable {
 
                 String url = jobQueueService.dequeueJob(30, TimeUnit.SECONDS);
                 if (url != null) {
+                    productService.setProductStatus(url, ProductStatus.IN_PROGRESS);
                     processJob(url);
                 }
 
@@ -50,13 +54,18 @@ public class CrawlerWorker implements Runnable {
     private void processJob(String url) {
 
         try {
+
             log.info("Worker Thread: {}, Scraping Url: {}", Thread.currentThread().getName(), url);
 
-            Optional<ProductEntity> product = webScraperService.scrape(url);
-            product.ifPresent(productRepository::save);
+            Optional<ParsedProductData> product = webScraperService.scrape(url);
+            product.ifPresent(parsedProductData -> productService.update(parsedProductData, url));
+            productService.setProductStatus(url, ProductStatus.DONE);
 
         } catch (Exception e) {
+
             log.error("Error while scraping: {}", url, e);
+            productService.setProductStatus(url, ProductStatus.FAILED);
+
         }
 
     }
