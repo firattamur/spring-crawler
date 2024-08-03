@@ -1,6 +1,6 @@
 package com.firattamur.spring_crawler.worker;
 
-import com.firattamur.spring_crawler.domain.entity.ProductStatus;
+import com.firattamur.spring_crawler.domain.entity.CrawlingStatus;
 import com.firattamur.spring_crawler.domain.model.ParsedProductData;
 import com.firattamur.spring_crawler.service.JobQueueService;
 import com.firattamur.spring_crawler.service.ProductService;
@@ -38,12 +38,12 @@ public class CrawlerWorker implements Runnable {
 
                 String url = jobQueueService.dequeueJob(30, TimeUnit.SECONDS);
                 if (url != null) {
-                    productService.setProductStatus(url, ProductStatus.IN_PROGRESS);
+                    productService.setCrawlingStatus(url, CrawlingStatus.IN_PROGRESS);
                     processJob(url);
                 }
 
             } catch (Exception e) {
-                log.error("Error in worker loop", e);
+                log.error("Error in worker loop");
             }
         }
 
@@ -55,13 +55,19 @@ public class CrawlerWorker implements Runnable {
         try {
 
             Optional<ParsedProductData> product = webScraperService.scrape(url);
-            product.ifPresent(parsedProductData -> productService.update(parsedProductData, url));
-            productService.setProductStatus(url, ProductStatus.DONE);
+
+            if (product.isEmpty()) {
+                productService.setCrawlingStatus(url, CrawlingStatus.FAILED);
+                return;
+            }
+
+            productService.update(product.get(), url);
+            productService.setCrawlingStatus(url, CrawlingStatus.DONE);
 
         } catch (Exception e) {
 
-            log.error("Error while scraping: {}", url, e);
-            productService.setProductStatus(url, ProductStatus.FAILED);
+            log.error("Error while scraping: {}, error: {}", url, e.getMessage());
+            productService.setCrawlingStatus(url, CrawlingStatus.FAILED);
 
         }
 

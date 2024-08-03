@@ -1,6 +1,6 @@
 package com.firattamur.spring_crawler.domain.entity;
 
-public enum ProductStatus {
+public enum CrawlingStatus {
     PENDING,
     IN_PROGRESS,
     DONE,

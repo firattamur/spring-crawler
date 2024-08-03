@@ -1,7 +1,7 @@
 package com.firattamur.spring_crawler.service;
 
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
-import com.firattamur.spring_crawler.domain.entity.ProductStatus;
+import com.firattamur.spring_crawler.domain.entity.CrawlingStatus;
 import com.firattamur.spring_crawler.domain.model.ParsedProductData;
 import com.firattamur.spring_crawler.repository.ProductRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,10 @@ public class ProductService {
         return productRepository.findByUrl(url);
     }
 
+    public List<ProductEntity> findAll() {
+        return productRepository.findAll();
+    }
+
     public void update(ParsedProductData parsedProductData, String url) {
         ProductEntity productEntity = productRepository.findByUrl(url).orElse(null);
         if (productEntity == null) {
@@ -55,17 +60,17 @@ public class ProductService {
 
         productEntity.setTitle(parsedProductData.getTitle());
         productEntity.setPrice(parsedProductData.getPrice());
-        productEntity.setDescription(parsedProductData.getDescription().substring(0, 3000));
+        productEntity.setDescription(parsedProductData.getDescription().substring(0, Math.min(parsedProductData.getDescription().length(), 3000)));
         productEntity.setMerchantName(parsedProductData.getMerchantName());
         productEntity.setCrawledAt(parsedProductData.getCrawledAt());
 
         productRepository.save(productEntity);
     }
 
-    public void setProductStatus(String url, ProductStatus status) {
+    public void setCrawlingStatus(String url, CrawlingStatus status) {
         ProductEntity productEntity = productRepository.findByUrl(url).orElse(null);
         if (productEntity != null) {
-            productEntity.setProductStatus(status);
+            productEntity.setCrawlingStatus(status);
             productRepository.save(productEntity);
         }
     }

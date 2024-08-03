@@ -1,6 +1,6 @@
 package com.firattamur.spring_crawler.domain.dto;
 
-import com.firattamur.spring_crawler.domain.entity.ProductStatus;
+import com.firattamur.spring_crawler.domain.entity.CrawlingStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class ProductResponseDto {
     private String title;
     private String description;
     private String merchantName;
-    private ProductStatus productStatus;
+    private CrawlingStatus crawlingStatus;
     private LocalDateTime createdAt;
     private LocalDateTime crawledAt;
 

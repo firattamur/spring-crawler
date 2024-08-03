@@ -3,6 +3,7 @@ package com.firattamur.spring_crawler.controller;
 import com.firattamur.spring_crawler.domain.dto.ProductCreateDto;
 import com.firattamur.spring_crawler.domain.dto.ProductResponseDto;
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
+import com.firattamur.spring_crawler.domain.entity.CrawlingStatus;
 import com.firattamur.spring_crawler.mapper.Mapper;
 import com.firattamur.spring_crawler.mapper.impl.ProductCreateDtoMapperImpl;
 import com.firattamur.spring_crawler.service.JobQueueService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,6 +41,15 @@ public class ProductController {
     public ProductResponseDto postMethodName(@RequestBody ProductCreateDto dto) {
         ProductEntity productEntity = productService.findByUrl(dto.getUrl()).orElse(null);
         if (productEntity != null) {
+
+            if (productEntity.getCrawlingStatus() != CrawlingStatus.DONE) {
+                jobQueueService.enqueueJob(productEntity.getUrl());
+                log.info("Product submitted to queue with url: {}", productEntity.getUrl());
+
+                productEntity.setCrawlingStatus(CrawlingStatus.IN_PROGRESS);
+                productService.save(productEntity);
+            }
+
             return productResponseDtoMapper.mapTo(productEntity);
         }
 
@@ -60,6 +71,13 @@ public class ProductController {
         }
 
         return productResponseDtoMapper.mapTo(productEntity.get());
+    }
+
+    @GetMapping("/products")
+    public Iterable<ProductResponseDto> getMethodName() {
+        return List.of(productService.findAll().stream()
+                .map(productResponseDtoMapper::mapTo)
+                .toArray(ProductResponseDto[]::new));
     }
 
 }

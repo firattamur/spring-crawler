@@ -44,12 +44,12 @@ public class ProductEntity {
     private String merchantName;
 
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;
+    private CrawlingStatus crawlingStatus;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.productStatus = ProductStatus.PENDING;
+        this.crawlingStatus = CrawlingStatus.PENDING;
     }
 
 }

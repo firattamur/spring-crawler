@@ -77,7 +77,7 @@ public class WebScraperService {
                     .build());
 
         } catch (Exception e) {
-            log.error("Error while scraping: {}", url, e);
+            log.error("Error while scraping: {}", url);
         }
 
         return Optional.empty();
