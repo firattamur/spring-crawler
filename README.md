@@ -16,6 +16,7 @@ Spring-Crawler is a fun showcase project demonstrating web crawling capabilities
 - Redis
 - Java
 - Docker
+- Swagger
 
 ## 🔄 How It Works
 
@@ -38,22 +39,30 @@ Spring-Crawler is a fun showcase project demonstrating web crawling capabilities
 
 ## 🔗 API Endpoints
 
+- Swagger UI: http://localhost:8080/swagger-ui.html
+
 1. `/submit`: Submit a product URL for crawling
 
    - Method: POST
    - Body: `{ "url": "https://www.hepsiburada.com/product-url" }`
+   
 2. `/product`: Get product crawling status
 
    - Method: GET
    - Query Param: `id` (product ID)
 
+3. `/products`: Get all products
+
+   - Method: GET
+
 ## 🚀 Getting Started
 
 1. Clone the repository
-2. Run `docker-compose up` to start the PostgreSQL and Redis containers
-3. Run the Spring Boot application
+2. Run the Spring Boot application
+3. Access the Swagger UI at http://localhost:8080/swagger-ui.html
 4. Submit a product URL using the `/submit` endpoint
 5. Check the product status using the `/product` endpoint
+6. View all products using the `/products` endpoint
 
 ## 🤝 Contributing
 
