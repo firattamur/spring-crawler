@@ -1,5 +1,6 @@
 package com.firattamur.spring_crawler.domain.dto;
 
+import com.firattamur.spring_crawler.domain.entity.ProductStatus;
 import lombok.Data;
 
 @Data
@@ -7,13 +8,10 @@ public class ProductResponseDto {
 
     private Long id;
     private String url;
-    private CrawlingStatus status;
-
-    enum CrawlingStatus {
-        PENDING,
-        IN_PROGRESS,
-        COMPLETED,
-        FAILED
-    }
+    private Long price;
+    private String title;
+    private String description;
+    private String merchantName;
+    private ProductStatus productStatus;
 
 }

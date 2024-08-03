@@ -27,10 +27,9 @@ public class ProductEntity {
     @Column(name = "crawled_at")
     private LocalDateTime crawledAt;
 
-    private Long price;
+    private Double price;
     private String title;
     private String description;
-    private String qa;
     private String merchantName;
 
     @Enumerated(EnumType.STRING)
