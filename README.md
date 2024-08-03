@@ -2,6 +2,8 @@
 
 Spring-Crawler is a fun showcase project demonstrating web crawling capabilities for products from [hepsiburada.com](https://www.hepsiburada.com/), with data persistence in a PostgreSQL database.
 
+> PS: This project is for educational purposes only. Please respect the terms of service of the websites you crawl and do not use this project for unethical purposes. 
+
 ## 🚀 Features
 
 - Crawl product data from hepsiburada.com
