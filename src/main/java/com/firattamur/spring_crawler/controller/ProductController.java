@@ -1,23 +1,16 @@
 package com.firattamur.spring_crawler.controller;
 
+import com.firattamur.spring_crawler.domain.dto.ProductCreateDto;
+import com.firattamur.spring_crawler.domain.dto.ProductResponseDto;
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
 import com.firattamur.spring_crawler.mapper.Mapper;
 import com.firattamur.spring_crawler.mapper.impl.ProductCreateDtoMapperImpl;
 import com.firattamur.spring_crawler.service.JobQueueService;
+import com.firattamur.spring_crawler.service.ProductService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.firattamur.spring_crawler.domain.dto.ProductCreateDto;
-import com.firattamur.spring_crawler.domain.dto.ProductResponseDto;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import com.firattamur.spring_crawler.service.ProductService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 

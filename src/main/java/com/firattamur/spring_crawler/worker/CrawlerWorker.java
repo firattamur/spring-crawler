@@ -1,9 +1,7 @@
 package com.firattamur.spring_crawler.worker;
 
-import com.firattamur.spring_crawler.domain.entity.ProductEntity;
 import com.firattamur.spring_crawler.domain.entity.ProductStatus;
 import com.firattamur.spring_crawler.domain.model.ParsedProductData;
-import com.firattamur.spring_crawler.repository.ProductRepository;
 import com.firattamur.spring_crawler.service.JobQueueService;
 import com.firattamur.spring_crawler.service.ProductService;
 import com.firattamur.spring_crawler.service.WebScraperService;
@@ -52,10 +50,9 @@ public class CrawlerWorker implements Runnable {
     }
 
     private void processJob(String url) {
+        log.info("Worker Thread: {}, Scraping Url: {}", Thread.currentThread().getName(), url);
 
         try {
-
-            log.info("Worker Thread: {}, Scraping Url: {}", Thread.currentThread().getName(), url);
 
             Optional<ParsedProductData> product = webScraperService.scrape(url);
             product.ifPresent(parsedProductData -> productService.update(parsedProductData, url));

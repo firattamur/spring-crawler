@@ -2,13 +2,10 @@ package com.firattamur.spring_crawler.mapper.impl;
 
 import com.firattamur.spring_crawler.domain.dto.ProductCreateDto;
 import com.firattamur.spring_crawler.domain.entity.ProductEntity;
-import com.firattamur.spring_crawler.domain.entity.ProductStatus;
 import com.firattamur.spring_crawler.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class ProductCreateDtoMapperImpl implements Mapper<ProductEntity, ProductCreateDto> {

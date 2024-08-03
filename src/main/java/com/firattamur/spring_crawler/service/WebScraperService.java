@@ -2,8 +2,6 @@ package com.firattamur.spring_crawler.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.firattamur.spring_crawler.domain.entity.ProductEntity;
-import com.firattamur.spring_crawler.domain.entity.ProductStatus;
 import com.firattamur.spring_crawler.domain.model.ParsedProductData;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
