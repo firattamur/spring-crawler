@@ -9,6 +9,7 @@ import com.firattamur.spring_crawler.mapper.impl.ProductCreateDtoMapperImpl;
 import com.firattamur.spring_crawler.service.JobQueueService;
 import com.firattamur.spring_crawler.service.ProductService;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class ProductController {
     }
     
     @PostMapping("/submit")
-    public ProductResponseDto postMethodName(@RequestBody ProductCreateDto dto) {
+    public ProductResponseDto postMethodName(@Valid @RequestBody ProductCreateDto dto) {
         ProductEntity productEntity = productService.findByUrl(dto.getUrl()).orElse(null);
         if (productEntity != null) {
 
